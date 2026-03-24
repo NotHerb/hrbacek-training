@@ -9,23 +9,22 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #f4f4f0; font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem 3rem; }
     .wrap { width: 100%; max-width: 560px; }
-    .header { background: #111; color: #fff; border-radius: 14px; padding: 2.25rem 2rem 2rem; margin-bottom: 1.5rem; }
+    .header { background: #111; color: #fff; border-radius: 14px; padding: 2.2rem 2rem 2rem; margin-bottom: 1.5rem; }
     .logo { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; color: #F5C84A; line-height: 1; margin-bottom: 4px; }
-    .sub { font-size: 13px; color: #aaa; letter-spacing: 1.5px; text-transform: uppercase; }
+    .sub { font-size: 14px; color: #aaa; letter-spacing: 1.5px; text-transform: uppercase; }
     .divider { width: 40px; height: 3px; background: #F5C84A; margin: 14px 0; border-radius: 2px; }
     .tagline { font-size: 15px; color: #ccc; line-height: 1.65; }
     .card { background: #fff; border-radius: 14px; padding: 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
     .field { margin-bottom: 1.4rem; }
-    label { display: block; font-size: 15px; font-weight: 500; color: #444; margin-bottom: 7px; letter-spacing: 0.2px; }
-    .avail { font-size: 14px; color: #888; margin-top: 5px; font-weight: 400; }
-    input, select { width: 100%; padding: 12px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; font-family: 'DM Sans', sans-serif; color: #111; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; appearance: none; -webkit-appearance: none; }
+    label { display: block; font-size: 14px; font-weight: 500; color: #555; margin-bottom: 7px; }
+    input, select { width: 100%; padding: 13px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; font-family: 'DM Sans', sans-serif; color: #111; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; appearance: none; -webkit-appearance: none; }
     input:focus, select:focus { border-color: #F5C84A; box-shadow: 0 0 0 3px rgba(245,200,74,0.2); }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .avail { font-size: 13px; color: #888; margin-top: 6px; font-style: italic; }
     .optional { font-weight: 400; color: #aaa; font-size: 13px; }
     .btn { width: 100%; padding: 16px; background: #F5C84A; color: #111; border: none; border-radius: 8px; font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; cursor: pointer; margin-top: 0.5rem; transition: opacity 0.15s, transform 0.1s; }
     .btn:hover { opacity: 0.88; }
     .btn:active { transform: scale(0.98); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .note { font-size: 13px; color: #aaa; text-align: center; margin-top: 12px; line-height: 1.6; }
     .success { display: none; text-align: center; padding: 2.5rem 1rem; }
     .check { width: 64px; height: 64px; background: #F5C84A; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 28px; }
@@ -42,7 +41,6 @@
       <div class="divider"></div>
       <div class="tagline">Fill out this form to book a 1-on-1 training session. Payment is due the day of training. Life happens — if you need to cancel or reschedule just reach out and we'll work something out. Communication is all I ask!</div>
     </div>
-
     <div class="card">
       <div id="form-body">
         <div class="row">
@@ -100,7 +98,6 @@
         <button class="btn" onclick="submitForm()">Book my session</button>
         <p class="note">You'll receive a confirmation text within 24 hours.</p>
       </div>
-
       <div class="success" id="success">
         <div class="check">✓</div>
         <div class="success-title">You're booked!</div>
@@ -108,29 +105,18 @@
       </div>
     </div>
   </div>
-
   <script>
     var weekdayTimes = ['5:00pm','6:00pm','7:00pm'];
-    var weekendTimes = ['8:00am','8:30am','9:00am','9:30am','10:00am','10:30am','11:00am','11:30am','12:00pm','12:30pm','1:00pm','1:30pm','2:00pm','2:30pm','3:00pm','3:30pm','4:00pm','4:30pm','5:00pm'];
-
+    var weekendTimes = ['8:00am','9:00am','10:00am','11:00am','12:00pm','1:00pm','2:00pm','3:00pm','4:00pm','5:00pm'];
     function updateTimes() {
       var day = document.getElementById('day').value;
       var timeSelect = document.getElementById('time');
       timeSelect.innerHTML = '';
       var times = (day === 'Saturday' || day === 'Sunday') ? weekendTimes : (day ? weekdayTimes : []);
-      if (!day) {
-        timeSelect.innerHTML = '<option value="">Select a day first</option>';
-        return;
-      }
+      if (!times.length) { timeSelect.innerHTML = '<option value="">Select a day first</option>'; return; }
       timeSelect.innerHTML = '<option value="">Select a time</option>';
-      times.forEach(function(t) {
-        var opt = document.createElement('option');
-        opt.value = t;
-        opt.textContent = t;
-        timeSelect.appendChild(opt);
-      });
+      times.forEach(function(t) { var o = document.createElement('option'); o.value = t; o.textContent = t; timeSelect.appendChild(o); });
     }
-
     async function submitForm() {
       var fields = ['parentName','phone','athleteName','age','day','time'];
       var labels = ['Parent name','Phone number','Athlete name','Athlete age','Preferred day','Preferred time'];
@@ -154,24 +140,10 @@
         'How They Heard': document.getElementById('referral').value || 'Not specified'
       };
       try {
-        var res = await fetch('https://formspree.io/f/xqegzejl', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        if (res.ok) {
-          document.getElementById('form-body').style.display = 'none';
-          document.getElementById('success').style.display = 'block';
-        } else {
-          alert('Something went wrong. Please try again.');
-          btn.textContent = 'Book my session';
-          btn.disabled = false;
-        }
-      } catch(e) {
-        alert('Something went wrong. Please try again.');
-        btn.textContent = 'Book my session';
-        btn.disabled = false;
-      }
+        var res = await fetch('https://formspree.io/f/xqegzejl', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) });
+        if (res.ok) { document.getElementById('form-body').style.display = 'none'; document.getElementById('success').style.display = 'block'; }
+        else { alert('Something went wrong. Please try again.'); btn.textContent = 'Book my session'; btn.disabled = false; }
+      } catch(e) { alert('Something went wrong. Please try again.'); btn.textContent = 'Book my session'; btn.disabled = false; }
     }
   </script>
 </body>
